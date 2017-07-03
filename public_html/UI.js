@@ -113,7 +113,7 @@ ViewDetailEdit = function(elem, data, storage) {
         if (this.data !== null) {
             this.data.changeItem(JSON.parse(this.elArea.value));
         } else if (this.storage !== null) {
-            this.storage.new(data);
+            //this.storage.new(data);
         }
         this.elMain.parentNode.removeChild(this.elMain);
     }.bind(this);

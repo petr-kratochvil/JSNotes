@@ -14,17 +14,8 @@ MainStorage = function() {
     }
     
     for (var i = 0; i< dataObject.length; i++) {
-        var newItem = new DataItem(dataObject[i].item);
-        setEvents = function (item) {
-            item.addEventListener("change", function () {
-                this.dispatchEvent("change");
-            }.bind(this));
-            item.addEventListener("remove", function () { 
-                this.data.splice(this.data.indexOf(item), 1);
-                this.dispatchEvent("change");
-            }.bind(this) );
-        }.bind(this);
-        setEvents(newItem);
+        var newItem = new DataItem(dataObject[i]);
+        this._setEvents(newItem);
         this.data.push(newItem);
     }
     this.addEventListener("change", function () { this.save(); }.bind(this));
@@ -32,13 +23,27 @@ MainStorage = function() {
 
 MainStorage.prototype = Object.create(Reactor.prototype);
 
+MainStorage.prototype._setEvents = function (item) {
+    item.addEventListener("change", function () {
+        this.dispatchEvent("change");
+    }.bind(this));
+    item.addEventListener("remove", function () {
+        this.data.splice(this.data.indexOf(item), 1);
+        this.dispatchEvent("change");
+    }.bind(this));
+};
+
 MainStorage.prototype.save = function() {
-    console.log("Saving!");
-    localStorage.silverArray = JSON.stringify(this.data);
+    var arrayToBeSaved = [];
+    for (var i = 0; i < this.data.length; i++)
+        arrayToBeSaved.push(this.data[i].item);
+    localStorage.silverArray = JSON.stringify(arrayToBeSaved);
 };
 
 MainStorage.prototype.new = function(item) {
-    this.data.push(new DataItem(item));
+    var newItem = new DataItem(item);
+    this._setEvents(newItem);
+    this.data.push(newItem);
     this.dispatchEvent("change");
 };
 
