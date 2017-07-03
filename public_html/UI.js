@@ -41,17 +41,19 @@ ViewDataList.prototype.build = function(storage) {
 ViewDataListItem = function(elem, data) {
     Reactor.call(this);
     this.elem = elem;
+    this.data = data;
     this.li = document.createElement("li");
     this.li.classList.add("item");
-    this.li.innerHTML = JSON.stringify(data.item);
-    this.buttonView = document.createElement("button");
-    this.buttonView.innerHTML = "View";
+    this.li.innerHTML = JSON.stringify(this.data.item);
     this.buttonDelete = document.createElement("button");
     this.buttonDelete.innerHTML = "Delete";
-    this.buttonView.onclick = function (a) {
-        this.dispatchEvent("view", data);
+    this.buttonDelete.classList.add("listItemDelete");
+    this.li.onclick = function () {
+        this.dispatchEvent("view", this.data);
     }.bind(this);
-    this.li.appendChild(this.buttonView);
+    this.buttonDelete.onclick = function () {
+        this.data.remove();
+    }.bind(this);
     this.li.appendChild(this.buttonDelete);
     this.elem.appendChild(this.li);
 };
@@ -94,7 +96,7 @@ ViewDetail.prototype.update = function () {
 ViewDetail.prototype.setData = function (data) {
     this.data = data;
     this.update();
-    //  this.data.addEventListener("change", this.update.bind(this));
+    this.data.addEventListener("change", this.update.bind(this));
 };
 
 ViewDetailEdit = function(elem, data, storage) {
@@ -102,6 +104,7 @@ ViewDetailEdit = function(elem, data, storage) {
     this.storage = typeof storage === "undefined"? null : storage;
     this.elMain = document.createElement("div");
     this.elArea = document.createElement("textarea");
+    this.elArea.value = JSON.stringify(this.data.item);
     this.elArea.cols = 80;
     this.elArea.rows = 10;
     this.buttonSave = document.createElement("button");
