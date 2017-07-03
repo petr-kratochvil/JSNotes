@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>JSNotes</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="Utils.js"></script>
+        <script src="MainStorage.js"></script>
+        <script src="UI.js"></script>
+        
+        <link rel=stylesheet href="main.css">
+    </head>
+    <body>
+        <script>
+            var silver = new MainStorage();
+            var clearForm = function() {
+                document.getElementById("title").value = "";
+                document.getElementById("short").value = "";
+                document.getElementById("long").value = "";
+            }
+        </script>
+        
+            <button onclick="silver.new(document.getElementById('title').value, document.getElementById('short').value, document.getElementById('long').value); clearForm();">Save</button>
+            <button onclick="clearForm()">Clear</button>
+            <button onclick="silver.clear()">Delete all</button>
+            <br><br>
+        <div id="detail">
+        </div>
+        <div id="list"></div>
+        <script>
+            var detail = new ViewDetail(document.getElementById("detail"));
+            var list = new ViewDataList(document.getElementById("list"), silver);
+            list.addEventListener("view", function (data) {
+                detail.setData(data);
+            });
+        </script>
+    </body>
+</html>

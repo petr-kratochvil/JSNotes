@@ -1,0 +1,14 @@
+.title { font-weight: bold; font-size: 150%; color: navy; background-color: blanchedalmond; padding: 1ex; }
+.short { background-color: lightgray; padding: 1ex; font-style: italic }
+.long { background-color: blanchedalmond; padding: 1ex; }
+
+.list .item {
+    border: 1px solid navy;
+    background-color: azure;
+    padding: 1ex;
+    font-family: monospace;
+}
+
+#detail { height: 20ex; border: 1px solid navy; }
+
+body { max-width: 50em; margin: 0 auto; }
