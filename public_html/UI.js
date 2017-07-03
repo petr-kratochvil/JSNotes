@@ -17,9 +17,9 @@ ViewDataList = function (elem, storage) {
 ViewDataList.prototype = Object.create(Reactor.prototype);
 
 ViewDataList.prototype.clear = function() {
-    for (var i = 0; i < this.li.length; i++) {
-        this.ul.removeChild(this.li[i]);
-        delete this.li[i];
+    for (var i = 0; i < this.items.length; i++) {
+        this.items[i].unattach();
+        delete this.items[i];
     }
     this.items = [];
 };
@@ -28,7 +28,7 @@ ViewDataList.prototype.build = function(storage) {
     for (var i = 0; i < storage.data.length; i++) {
         var newItem = new ViewDataListItem(this.ul, storage.data[i]);
         newItem.addEventListener("view", function (data) { this.dispatchEvent("view", data); }.bind(this));
-        this.items.push();
+        this.items.push(newItem);
     }
 };
 
@@ -40,6 +40,7 @@ ViewDataList.prototype.build = function(storage) {
  */
 ViewDataListItem = function(elem, data) {
     Reactor.call(this);
+    this.elem = elem;
     this.li = document.createElement("li");
     this.li.classList.add("item");
     this.li.innerHTML = JSON.stringify(data.item);
@@ -52,10 +53,14 @@ ViewDataListItem = function(elem, data) {
     }.bind(this);
     this.li.appendChild(this.buttonView);
     this.li.appendChild(this.buttonDelete);
-    elem.appendChild(this.li);
+    this.elem.appendChild(this.li);
 };
 
 ViewDataListItem.prototype = Object.create(Reactor.prototype);
+
+ViewDataListItem.prototype.unattach = function() {
+    this.elem.removeChild(this.li);
+};
 
 /**
  * 
