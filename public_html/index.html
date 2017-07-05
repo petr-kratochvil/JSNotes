@@ -23,6 +23,9 @@ and open the template in the editor.
             <button onclick="silver.new({});">New note</button>
             JSNotes
             <button onclick="silver.clear()">Delete all</button>
+            <button onclick="window.location='data:text/plain;charset=UTF-8;base64,'
+                        +btoa(encodeURIComponent(localStorage.silverArray).replace(/%([0-9A-F]{2})/g,
+                        function(match, p1) { return String.fromCharCode('0x' + p1);}))">Download data</button>
         </div>
         <div id="detail">
         </div>
