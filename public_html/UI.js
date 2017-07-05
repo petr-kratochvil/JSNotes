@@ -44,7 +44,7 @@ ViewDataListItem = function(elem, data) {
     this.data = data;
     this.li = document.createElement("li");
     this.li.classList.add("item");
-    this.li.innerHTML = JSON.stringify(this.data.item);
+    this.li.innerHTML = this.data.item.title;
     this.buttonDelete = document.createElement("button");
     this.buttonDelete.innerHTML = "Delete";
     this.buttonDelete.classList.add("listItemDelete");
@@ -72,8 +72,11 @@ ViewDataListItem.prototype.unattach = function() {
 ViewDetail = function(elem) {
     this.buttonEdit = document.createElement("button");
     this.buttonEdit.innerHTML = "edit";
+    this.viewEdit = null;
     this.buttonEdit.onclick = function() {
-        this.viewEdit = new ViewDetailEdit(elem, this.data);
+        if (this.viewEdit === null)
+            this.viewEdit = new ViewDetailEdit(elem, this.data, undefined
+                , function () { this.viewEdit = null; }.bind(this));
     }.bind(this);
     this.elTitle = document.createElement("div");
     this.elTitle.classList.add("title");
@@ -91,33 +94,57 @@ ViewDetail.prototype.update = function () {
     this.elTitle.innerHTML = this.data.item.title;
     this.elShort.innerHTML = this.data.item.short;
     this.elLong.innerHTML = this.data.item.long;
+    if (this.data.item.title === "")
+        this.buttonEdit.onclick();
 };
 
 ViewDetail.prototype.setData = function (data) {
     this.data = data;
+    if (this.viewEdit !== null) {
+        this.viewEdit.close();
+    }
     this.update();
     this.data.addEventListener("change", this.update.bind(this));
 };
 
-ViewDetailEdit = function(elem, data, storage) {
+ViewDetailEdit = function(elem, data, storage, callBackClose) {
     this.data = typeof data === "undefined"? null : data;
     this.storage = typeof storage === "undefined"? null : storage;
     this.elMain = document.createElement("div");
-    this.elArea = document.createElement("textarea");
-    this.elArea.value = JSON.stringify(this.data.item);
-    this.elArea.cols = 80;
-    this.elArea.rows = 10;
+    this.elTitle = document.createElement("input");
+    this.elTitle.type = "text";
+    this.elTitle.value = data.item.title;
+    this.elShort = document.createElement("input");
+    this.elShort.type = "text";
+    this.elShort.value = data.item.short;
+    this.elLong = document.createElement("textarea");
+    this.elLong.value = this.data.item.long;
+    this.elLong.cols = 50;
+    this.elLong.rows = 10;
     this.buttonSave = document.createElement("button");
     this.buttonSave.innerHTML = "Save";
+    this.callBackClose = callBackClose;
     this.buttonSave.onclick = function () {
         if (this.data !== null) {
-            this.data.changeItem(JSON.parse(this.elArea.value));
+            this.data.changeItem({
+                title: this.elTitle.value,
+                short: this.elShort.value,
+                long: this.elLong.value
+            });
         } else if (this.storage !== null) {
             //this.storage.new(data);
         }
-        this.elMain.parentNode.removeChild(this.elMain);
+        this.close();
     }.bind(this);
-    this.elMain.appendChild(this.elArea);
+    this.elMain.appendChild(this.elTitle);
+    this.elMain.appendChild(this.elShort);
+    this.elMain.appendChild(this.elLong);
     this.elMain.appendChild(this.buttonSave);
     elem.appendChild(this.elMain);
+};
+
+ViewDetailEdit.prototype.close = function () {
+    this.elMain.parentNode.removeChild(this.elMain);
+    if (typeof this.callBackClose === "function")
+        this.callBackClose();
 };

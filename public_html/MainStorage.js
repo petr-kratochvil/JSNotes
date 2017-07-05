@@ -61,6 +61,12 @@ MainStorage.prototype.clear = function() {
  */
 DataItem = function(item) {
     Reactor.call(this);
+    if (typeof item.title === "undefined")
+        item.title = "";
+    if (typeof item.short === "undefined")
+        item.short = "";
+    if (typeof item.long === "undefined")
+        item.long = "";
     this.item = item;
 };
 

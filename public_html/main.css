@@ -13,12 +13,17 @@
 
 .list .item {
     box-sizing: border-box; 
-    border: 1px solid navy;
-    background-color: azure;
+    /*border: 1px solid navy;*/
+    background-color: lightgray;
     padding: 1ex;
     font-family: monospace;
     cursor: pointer;
     height: 5ex;
+    margin: 0.5ex;
+}
+
+.list .item:hover {
+    background-color: gray;
 }
 
 #detail {
@@ -32,8 +37,13 @@
     border: 1px solid navy;
 }
 
-#heading { font-size: 200%; margin: 1ex; display: inline-block; }
+#heading {
+    font-size: 200%; margin: 1ex;
+    display: flex; justify-content: center;
+}
 
-body { max-width: 50em; margin: 0 auto; }
+#heading button {margin: 0 2ex}
+
+body { max-width: 60em; margin: 0 auto; position: relative; }
 
 .listItemDelete { float: right;  }

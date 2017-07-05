@@ -19,10 +19,11 @@ and open the template in the editor.
         <script>
             var silver = new MainStorage();
         </script>
-        <button onclick="silver.new({});">New note</button>
-        <span id="heading">JSNotes</span>
+        <div id="heading">
+            <button onclick="silver.new({});">New note</button>
+            JSNotes
             <button onclick="silver.clear()">Delete all</button>
-            <br><br>
+        </div>
         <div id="detail">
         </div>
         <div id="list"></div>
